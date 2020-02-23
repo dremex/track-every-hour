@@ -20,6 +20,7 @@
 
 	import { activityTypes } from './stores.js'
 
+	import AddActivity from './AddActivity.svelte'
 	import ActivityList from './ActivityList.svelte'
 	import ActivityTypes from './ActivityTypes.svelte'
 	
@@ -43,6 +44,8 @@
 
 		if (path.startsWith('/activityTypes')) {
 			page = 'activityTypes'
+		} else if (path.startsWith('/activities/add')) {
+			page = 'addActivity'
 		} else {
 			page = 'activities'
 		}
@@ -54,15 +57,19 @@
 <svelte:window on:hashchange={hashchange}/>
 
 <main>
-	<a href="#/activities">Activities</a><br>
-	<a href="#/activityTypes">Activity Types</a><hr>
-
 	{#if appInitializing}
 		<p>APP LOADING</p>
-	{:else if page === 'activityTypes'}
-		<ActivityTypes />
 	{:else}
-		<ActivityList />
+		<a href="#/activities">Activities</a><br>
+		<a href="#/activityTypes">Activity Types</a><hr>
+
+		{#if page === 'activityTypes'}
+			<ActivityTypes />
+		{:else if page === 'addActivity'}
+			<AddActivity />
+		{:else}
+			<ActivityList />
+		{/if}
 	{/if}
 </main>
 
@@ -70,7 +77,6 @@
 	main {
 		text-align: center;
 		padding: 1em;
-		max-width: 240px;
 		margin: 0 auto;
 	}
 
@@ -79,11 +85,5 @@
 		text-transform: uppercase;
 		font-size: 4em;
 		font-weight: 100;
-	}
-
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
 	}
 </style>

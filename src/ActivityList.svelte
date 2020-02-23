@@ -97,7 +97,7 @@
 					activityType={$activityTypes[activities[formatDate($currentDate)][i].activityTypeId]}
 				/>
 			{:else}
-				<li>{formatHour(i)}</li>
+				<li on:click={() => window.location = `#/activities/add/${formatDate($currentDate)}/${i}`}>{formatHour(i)}</li>
 			{/if}
 		{/each}
 	{/if}
