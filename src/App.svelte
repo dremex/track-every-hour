@@ -56,7 +56,7 @@
 
 <svelte:window on:hashchange={hashchange}/>
 
-<main>
+<div class='app-root'>
 	{#if appInitializing}
 		<p>APP LOADING</p>
 	{:else}
@@ -71,19 +71,13 @@
 			<ActivityList />
 		{/if}
 	{/if}
-</main>
+</div>
 
 <style>
-	main {
+	.app-root {
 		text-align: center;
-		padding: 1em;
+		padding-left: 10px;
+		padding-right: 10px;
 		margin: 0 auto;
-	}
-
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
 	}
 </style>

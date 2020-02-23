@@ -5,7 +5,7 @@
 
 	import { DAYS, MONTHS } from './helpers/constants'
 	import { startOfWeek, endOfWeek } from 'date-fns'
-	import { formatDate, formatHour, setupNewDate } from './helpers/utils'
+	import { formatDate, setupNewDate } from './helpers/utils'
 
 	import { activityTypes, currentDate } from './stores.js'
 
@@ -50,11 +50,17 @@
 </script>
 
 <style>
+	h2 {
+		margin-top: 18px;
+		text-align: left;
+		font-size: 24px;
+	}
+
 	.day-block {
 		display: flex;
 		flex-direction: row;
 		justify-content: space-evenly;
-		margin-bottom: 10px;
+		margin-bottom: 20px;
 	}
 
 	.day {
@@ -74,7 +80,7 @@
 	}
 </style>
 
-<main>
+<div>
 	<h2>{MONTHS[$currentDate.getMonth()]}</h2>
 
 	{#if activitesLoading}
@@ -92,13 +98,19 @@
 		{#each Array(24) as _, i}
 			{#if activities[formatDate($currentDate)] && activities[formatDate($currentDate)][i]}
 				<Activity
-					hour={formatHour(i)}
+					hour={i}
+					date={$currentDate}
 					notes={activities[formatDate($currentDate)][i].notes}
 					activityType={$activityTypes[activities[formatDate($currentDate)][i].activityTypeId]}
 				/>
 			{:else}
-				<li on:click={() => window.location = `#/activities/add/${formatDate($currentDate)}/${i}`}>{formatHour(i)}</li>
+				<Activity
+					hour={i}
+					date={$currentDate}
+					notes={null}
+					activityType={null}
+				/>
 			{/if}
 		{/each}
 	{/if}
-</main>
+</div>
