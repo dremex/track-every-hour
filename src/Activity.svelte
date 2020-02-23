@@ -26,7 +26,7 @@
   }
 
   .icon-container {
-    width: 52px;
+    min-width: 52px;
     align-items: center;
     display: flex;
     height: 100%;
