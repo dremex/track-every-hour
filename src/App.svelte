@@ -4,7 +4,7 @@
 	import 'firebase/database'
 
 	import { startOfWeek, endOfWeek } from 'date-fns'
-	import { formatDate, formatHour, setupNewDate } from './helpers/utils'
+	import { formatDate, formatHour } from './helpers/utils'
 
 	import { activityTypes, activityStore, currentDate } from './stores.js'
 
@@ -17,18 +17,23 @@
 	export let appInitializing = true
 
 	async function hashchange() {
-		$activityTypes = await firebase
-			.database()
-			.ref(`/activityTypes`)
-			.orderByKey()
-			.once('value')
-			.then(function(snapshot) {
-			return snapshot.val() || {}
-		})
+		if (!$activityTypes.lastFetched) {
+			$activityTypes = {
+				'lastFetched': new Date(),
+				'activityTypes': await firebase
+					.database()
+					.ref(`/activityTypes`)
+					.orderByKey()
+					.once('value')
+					.then(function(snapshot) {
+					return snapshot.val() || []
+				})
+			}
+		}
 
 		if (!$activityStore.lastFetched) {
 			$activityStore = {
-				'lastFetched': setupNewDate(),
+				'lastFetched': new Date(),
 				activities: await firebase
 					.database()
 					.ref(`/activities`)

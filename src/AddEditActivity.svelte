@@ -46,7 +46,7 @@
         console.log('saved!')
 
         window.location = '#/activities/'
-	}
+    }
 </script>
 
 <style>
@@ -76,7 +76,7 @@
 
     <input bind:value={notes} placeholder='Optional Notes'>
 
-    {#each Object.entries($activityTypes) as [activityTypeId, activityType]}
+    {#each Object.entries($activityTypes.activityTypes) as [activityTypeId, activityType]}
         <Activity
             header={activityType.name}
             notes={'0 this week'}

@@ -75,7 +75,7 @@
 			<Activity
 				header={formatHour(i)}
 				notes={$activityStore.activities[formatDate($currentDate)][i].notes}
-				activityType={$activityTypes[$activityStore.activities[formatDate($currentDate)][i].activityTypeId]}
+				activityType={$activityTypes.activityTypes[$activityStore.activities[formatDate($currentDate)][i].activityTypeId]}
 				on:activityClicked={() => window.location = `#/activities/edit/${formatDate($currentDate)}/${i}`}
 			/>
 		{:else}
