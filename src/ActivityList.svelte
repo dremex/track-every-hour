@@ -7,29 +7,9 @@
 	import { startOfWeek, endOfWeek } from 'date-fns'
 	import { formatDate, formatHour, setupNewDate } from './helpers/utils'
 
-	import { activityTypes, currentDate } from './stores.js'
+	import { activityStore, activityTypes, currentDate } from './stores.js'
 
 	import Activity from './Activity.svelte';
-
-	export let activities = {}
-	export let activitesLoading = true
-
-	async function componentMounted() {
-		activities = await firebase
-			.database()
-			.ref(`/activities`)
-			.orderByKey()
-			.startAt(formatDate(startOfWeek($currentDate)))
-			.endAt(formatDate(endOfWeek($currentDate)))
-			.once('value')
-			.then(function(snapshot) {
-				return snapshot.val() || {}
-			})
-
-		console.log('activities', activities)
-
-		activitesLoading = false
-	}
 
 	function buildDaysBar() {
 		const days = []
@@ -45,8 +25,6 @@
 
 		return days
 	}
-
-	onMount(componentMounted)
 </script>
 
 <style>
@@ -83,34 +61,30 @@
 <div>
 	<h2>{MONTHS[$currentDate.getMonth()]}</h2>
 
-	{#if activitesLoading}
-		<p>ACTIVITIES LOADING</p>
-	{:else}
-		<div class='day-block'>
-			{#each buildDaysBar() as date, i}
-				<div class='{i == $currentDate.getDay() ? 'day active' : 'day'}' on:click={() => $currentDate = date}>
-					<span class='day-of-week'>{DAYS[date.getDay()]}</span>
-					<span class='day-of-month'>{date.getDate()}</span>
-				</div>
-			{/each}
-		</div>
-
-		{#each Array(24) as _, i}
-			{#if activities[formatDate($currentDate)] && activities[formatDate($currentDate)][i]}
-				<Activity
-					header={formatHour(i)}
-					notes={activities[formatDate($currentDate)][i].notes}
-					activityType={$activityTypes[activities[formatDate($currentDate)][i].activityTypeId]}
-					on:activityClicked={() => window.location = `#/activities/edit/${formatDate($currentDate)}/${i}`}
-				/>
-			{:else}
-				<Activity
-					header={formatHour(i)}
-					notes={null}
-					activityType={null}
-					on:activityClicked={() => window.location = `#/activities/add/${formatDate($currentDate)}/${i}`}
-				/>
-			{/if}
+	<div class='day-block'>
+		{#each buildDaysBar() as date, i}
+			<div class='{i == $currentDate.getDay() ? 'day active' : 'day'}' on:click={() => $currentDate = date}>
+				<span class='day-of-week'>{DAYS[date.getDay()]}</span>
+				<span class='day-of-month'>{date.getDate()}</span>
+			</div>
 		{/each}
-	{/if}
+	</div>
+
+	{#each Array(24) as _, i}
+		{#if $activityStore.activities[formatDate($currentDate)] && $activityStore.activities[formatDate($currentDate)][i]}
+			<Activity
+				header={formatHour(i)}
+				notes={$activityStore.activities[formatDate($currentDate)][i].notes}
+				activityType={$activityTypes[$activityStore.activities[formatDate($currentDate)][i].activityTypeId]}
+				on:activityClicked={() => window.location = `#/activities/edit/${formatDate($currentDate)}/${i}`}
+			/>
+		{:else}
+			<Activity
+				header={formatHour(i)}
+				notes={null}
+				activityType={null}
+				on:activityClicked={() => window.location = `#/activities/add/${formatDate($currentDate)}/${i}`}
+			/>
+		{/if}
+	{/each}
 </div>

@@ -1,5 +1,5 @@
 <script>
-    import { activityTypes } from './stores.js'
+    import { activityStore, activityTypes } from './stores.js'
     import firebase from './helpers/firebase'
     import 'firebase/database'
     
@@ -18,7 +18,7 @@
         if (!selectedActivityTypeId) return // TODO: Error toast
 
         const urlParams = window.location.hash.slice(1).split('/')
-        // TODO: param verification (url has all params and of correct types)
+        // TODO: param verification (url has all params and of correct types - maybe do this in onMount)
 
         const action = urlParams[2]
         const date = urlParams[3]
@@ -28,6 +28,19 @@
             notes,
             activityTypeId: selectedActivityTypeId
         })
+
+        const activities = JSON.parse(JSON.stringify($activityStore.activities))
+
+        if (!activities[date]) {
+            activities[date] = []
+        }
+
+        activities[date][hour] = {
+            notes,
+            activityTypeId: selectedActivityTypeId,
+        }
+
+        $activityStore.activities = activities
 
         // TODO: Success Toast
         console.log('saved!')

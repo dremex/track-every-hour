@@ -1,24 +1,12 @@
 <script>
-	/* 
-		App life-cylce
-
-		* Initial load:
-			* Show app loading splash page
-			* Fetch activity types
-			* Save activity types to store
-			* Render activity list component
-
-		* Activity List:
-			* List loading skeleton
-			* Fetch activites from firebase
-			* Render list of Activity components
-	*/
-
 	import { onMount } from 'svelte';
 	import firebase from './helpers/firebase'
 	import 'firebase/database'
 
-	import { activityTypes } from './stores.js'
+	import { startOfWeek, endOfWeek } from 'date-fns'
+	import { formatDate, formatHour, setupNewDate } from './helpers/utils'
+
+	import { activityTypes, activityStore, currentDate } from './stores.js'
 
 	import AddEditActivity from './AddEditActivity.svelte'
 	import ActivityList from './ActivityList.svelte'
@@ -29,14 +17,30 @@
 	export let appInitializing = true
 
 	async function hashchange() {
-		activityTypes.set(await firebase
+		$activityTypes = await firebase
 			.database()
 			.ref(`/activityTypes`)
 			.orderByKey()
 			.once('value')
 			.then(function(snapshot) {
 			return snapshot.val() || {}
-		}))
+		})
+
+		if (!$activityStore.lastFetched) {
+			$activityStore = {
+				'lastFetched': setupNewDate(),
+				activities: await firebase
+					.database()
+					.ref(`/activities`)
+					.orderByKey()
+					.startAt(formatDate(startOfWeek($currentDate)))
+					.endAt(formatDate(endOfWeek($currentDate)))
+					.once('value')
+					.then(function(snapshot) {
+						return snapshot.val() || {}
+					})
+			}
+		}
 
 		appInitializing = false
 
