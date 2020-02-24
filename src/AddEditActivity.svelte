@@ -10,19 +10,45 @@
 
     window.scrollTo(0, 0)
 
+    function getUrlParams() {
+        const urlParams = window.location.hash.slice(1).split('/')
+        // TODO: param verification (url has all params and of correct types - maybe do this in onMount)
+
+        return {
+            'date': urlParams[3],
+            'hour': urlParams[4]
+        }
+    }
+
     function handleActivityTypeSelected(activityTypeId) {
         selectedActivityTypeId = activityTypeId
     }
 
+    async function handleDeleteActivity() {
+        // TODO: Confirm
+
+        const { date, hour } = getUrlParams()
+
+        await firebase.database().ref(`activities/${date}/${hour}`).remove()
+
+        const activities = JSON.parse(JSON.stringify($activityStore.activities))
+        delete activities[date][hour]
+
+        $activityStore.activities = activities
+
+        // TODO: Success Toast
+        console.log('deleted!')
+
+        window.location = '#/activities/'
+    }
+
     async function handleSaveActivity() {
-        if (!selectedActivityTypeId) return // TODO: Error toast
+        if (!selectedActivityTypeId) {
+            console.error('missing activity type')
+            return // TODO: Error toast
+        }
 
-        const urlParams = window.location.hash.slice(1).split('/')
-        // TODO: param verification (url has all params and of correct types - maybe do this in onMount)
-
-        const action = urlParams[2]
-        const date = urlParams[3]
-        const hour = urlParams[4]
+        const { date, hour } = getUrlParams()
 
         await firebase.database().ref(`activities/${date}/${hour}`).set({
             notes,
@@ -51,23 +77,42 @@
 
 <style>
     .fab {
-        width: 60px;
-        height: 60px;
-        background-color: #3880ff;
         border-radius: 50%;
         box-shadow: 0 6px 10px 0 #666;
         transition: all 0.1s ease-in-out;
-        font-size: 32px;
         text-align: center;
-        line-height: 60px;
         position: fixed;
-        right: 25px;
-        bottom: 20px;
     }
 
     .fab:hover {
         box-shadow: 0 6px 14px 0 #666;
         transform: scale(1.05);
+    }
+
+    .fab-small {
+        right: 30px;
+        width: 40px;
+        height: 40px;
+        font-size: 26px;
+        line-height: 40px;
+    }
+
+    .fab-large {
+        right: 25px;
+        width: 50px;
+        height: 50px;
+        font-size: 30px;
+        line-height: 50px;
+    }
+
+    #saveActivityButton {
+        bottom: 20px;
+        background-color: #3880ff;
+    }
+
+    #deleteActivityButton {
+        bottom: 80px;
+        background-color: red;
     }
 </style>
 
@@ -88,7 +133,10 @@
         />
     {/each}
 
-    <div class='fab' on:click={() => handleSaveActivity()}>
+    <div id='deleteActivityButton' class='fab fab-small' on:click={() => handleDeleteActivity()}>
+        <img src='/icons/delete.svg' alt='Delete Activity' />
+    </div>
+    <div id='saveActivityButton' class='fab fab-large' on:click={() => handleSaveActivity()}>
         <img src='/icons/save.svg' alt='Save Activity' />
     </div>
 </main>
