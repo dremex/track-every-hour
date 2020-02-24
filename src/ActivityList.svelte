@@ -5,7 +5,7 @@
 
 	import { DAYS, MONTHS } from './helpers/constants'
 	import { startOfWeek, endOfWeek } from 'date-fns'
-	import { formatDate, setupNewDate } from './helpers/utils'
+	import { formatDate, formatHour, setupNewDate } from './helpers/utils'
 
 	import { activityTypes, currentDate } from './stores.js'
 
@@ -98,17 +98,17 @@
 		{#each Array(24) as _, i}
 			{#if activities[formatDate($currentDate)] && activities[formatDate($currentDate)][i]}
 				<Activity
-					hour={i}
-					date={$currentDate}
+					header={formatHour(i)}
 					notes={activities[formatDate($currentDate)][i].notes}
 					activityType={$activityTypes[activities[formatDate($currentDate)][i].activityTypeId]}
+					on:activityClicked={() => window.location = `#/activities/edit/${formatDate($currentDate)}/${i}`}
 				/>
 			{:else}
 				<Activity
-					hour={i}
-					date={$currentDate}
+					header={formatHour(i)}
 					notes={null}
 					activityType={null}
+					on:activityClicked={() => window.location = `#/activities/add/${formatDate($currentDate)}/${i}`}
 				/>
 			{/if}
 		{/each}

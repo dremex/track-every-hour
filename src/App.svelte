@@ -20,9 +20,9 @@
 
 	import { activityTypes } from './stores.js'
 
-	import AddActivity from './AddActivity.svelte'
+	import AddEditActivity from './AddEditActivity.svelte'
 	import ActivityList from './ActivityList.svelte'
-	import ActivityTypes from './ActivityTypes.svelte'
+	import ActivityTypeList from './ActivityTypeList.svelte'
 	
 	let page = 'activities'
 
@@ -44,7 +44,7 @@
 
 		if (path.startsWith('/activityTypes')) {
 			page = 'activityTypes'
-		} else if (path.startsWith('/activities/add')) {
+		} else if (path.startsWith('/activities/add') || path.startsWith('/activities/edit')) {
 			page = 'addActivity'
 		} else {
 			page = 'activities'
@@ -64,9 +64,9 @@
 		<a href="#/activityTypes">Activity Types</a><hr>
 
 		{#if page === 'activityTypes'}
-			<ActivityTypes />
+			<ActivityTypeList />
 		{:else if page === 'addActivity'}
-			<AddActivity />
+			<AddEditActivity />
 		{:else}
 			<ActivityList />
 		{/if}
@@ -78,6 +78,7 @@
 		text-align: center;
 		padding-left: 10px;
 		padding-right: 10px;
+		padding-bottom: 10px;
 		margin: 0 auto;
 	}
 </style>

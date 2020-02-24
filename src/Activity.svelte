@@ -1,9 +1,8 @@
 <script>
-    import tinycolor from 'tinycolor2'
-    import { formatDate, formatHour } from './helpers/utils'
+    import { createEventDispatcher } from 'svelte'
+    const dispatch = createEventDispatcher()
     
-    export let date
-    export let hour
+    export let header
     export let notes
     export let activityType
 </script>
@@ -74,18 +73,18 @@
   }
 </style>
 
-<div class='row {activityType ? 'activity-row' : 'placeholder-row'}' on:click={() => window.location = `#/activities/add/${formatDate(date)}/${hour}`}>
+<div class='row {activityType ? 'activity-row' : 'placeholder-row'}' on:click={() => dispatch('activityClicked')}>
     {#if activityType}
       <div class='icon-container' style='background-color: #{activityType.color}'>
-        <img src='/icons/{activityType.icon}.svg' class='icon' alt='{activityType.name}' />
+        <img src='/icons/activityTypes/{activityType.icon}.svg' class='icon' alt='{activityType.name}' />
       </div>
-      <div class='label' style='background-color: {tinycolor(activityType.color).lighten(15).toString()}'>
-        <h2>{formatHour(hour)}</h2>
+      <div class='label' style='background-color: #{activityType.colorAccent}'>
+        <h2>{header}</h2>
         <p>{notes}</p>
       </div>
     {:else}
       <div class='label'>
-          <h2 class='placeholder'>{formatHour(hour)}</h2>
+          <h2 class='placeholder'>{header}</h2>
       </div>
     {/if}
 </div>
