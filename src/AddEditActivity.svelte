@@ -3,31 +3,23 @@
     import firebase from './helpers/firebase'
     import 'firebase/database'
     
+    import { onMount } from 'svelte'
     import Activity from './Activity.svelte'
 
     let notes = ''
+    let viewState = {}
     let selectedActivityTypeId = ''
 
     window.scrollTo(0, 0)
-
-    function getUrlParams() {
-        const urlParams = window.location.hash.slice(1).split('/')
-        // TODO: param verification (url has all params and of correct types - maybe do this in onMount)
-
-        return {
-            'date': urlParams[3],
-            'hour': urlParams[4]
-        }
-    }
 
     function handleActivityTypeSelected(activityTypeId) {
         selectedActivityTypeId = activityTypeId
     }
 
     async function handleDeleteActivity() {
-        // TODO: Confirm
+        // TODO: Show confirm modal
 
-        const { date, hour } = getUrlParams()
+        const { date, hour } = viewState
 
         await firebase.database().ref(`activities/${date}/${hour}`).remove()
 
@@ -44,11 +36,12 @@
 
     async function handleSaveActivity() {
         if (!selectedActivityTypeId) {
+            // TODO: Error toast
             console.error('missing activity type')
-            return // TODO: Error toast
+            return
         }
 
-        const { date, hour } = getUrlParams()
+        const { date, hour } = viewState
 
         await firebase.database().ref(`activities/${date}/${hour}`).set({
             notes,
@@ -73,6 +66,17 @@
 
         window.location = '#/activities/'
     }
+
+    onMount(() => {
+		const urlParams = window.location.hash.slice(1).split('/')
+        // TODO: param verification (url has all params and of correct types)
+
+        viewState = {
+            'action': urlParams[2],
+            'date': urlParams[3],
+            'hour': urlParams[4]
+        }
+	})
 </script>
 
 <style>
@@ -133,9 +137,12 @@
         />
     {/each}
 
-    <div id='deleteActivityButton' class='fab fab-small' on:click={() => handleDeleteActivity()}>
-        <img src='/icons/delete.svg' alt='Delete Activity' />
-    </div>
+    {#if viewState.action === 'edit'}
+        <div id='deleteActivityButton' class='fab fab-small' on:click={() => handleDeleteActivity()}>
+            <img src='/icons/delete.svg' alt='Delete Activity' />
+        </div>
+    {/if}
+
     <div id='saveActivityButton' class='fab fab-large' on:click={() => handleSaveActivity()}>
         <img src='/icons/save.svg' alt='Save Activity' />
     </div>
