@@ -1,10 +1,12 @@
 <script>
-    import { activityStore, activityTypes } from './stores.js'
+    import { activityStore, activityTypes, currentDate } from './stores.js'
     import firebase from './helpers/firebase'
     import 'firebase/database'
     
     import { onMount } from 'svelte'
     import Activity from './Activity.svelte'
+
+    import { formatDate } from './helpers/utils'
 
     let notes = ''
     let viewState = {}
@@ -76,6 +78,14 @@
             'date': urlParams[3],
             'hour': urlParams[4]
         }
+
+        const formattedDate = formatDate($currentDate)
+        if ($activityStore.activities[formattedDate] && $activityStore.activities[formattedDate][viewState.hour]) {
+            const activity = $activityStore.activities[formattedDate] && $activityStore.activities[formattedDate][viewState.hour]
+
+            notes = activity.notes
+            selectedActivityTypeId = activity.activityTypeId
+        }
 	})
 </script>
 
@@ -100,7 +110,6 @@
         font-size: 26px;
         line-height: 40px;
     }
-
     .fab-large {
         right: 25px;
         width: 50px;
