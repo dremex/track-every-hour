@@ -17,7 +17,7 @@
 
 	export let appInitializing = true
 
-	async function hashchange() {
+	async function initialize() {
 		if (!$activityTypes.lastFetched) {
 			$activityTypes = {
 				'lastFetched': new Date(),
@@ -48,8 +48,12 @@
 			}
 		}
 
-		appInitializing = false
+		onHashChange()
 
+		appInitializing = false
+	}
+
+	function onHashChange() {
 		const path = window.location.hash.slice(1)
 
 		if (path.startsWith('/activityTypes')) {
@@ -61,10 +65,10 @@
 		}
 	}
 
-	onMount(hashchange)
+	onMount(initialize)
 </script>
 
-<svelte:window on:hashchange={hashchange}/>
+<svelte:window on:hashchange={onHashChange}/>
 
 <div class='app-root'>
 	{#if appInitializing}
