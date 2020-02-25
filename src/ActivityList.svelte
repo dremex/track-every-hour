@@ -1,7 +1,5 @@
 <script>
-	import { onMount } from 'svelte';
-	import firebase from './helpers/firebase'
-	import 'firebase/database'
+	import { onMount } from 'svelte'
 
 	import { DAYS, MONTHS } from './helpers/constants'
 	import { startOfWeek, endOfWeek } from 'date-fns'
