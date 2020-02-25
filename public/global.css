@@ -68,3 +68,11 @@ button:not(:disabled):active {
 button:focus {
 	border-color: #666;
 }
+
+.scrollable {
+	bottom: 10px;
+	width: calc(100% - 35px);
+	overflow-x: hidden;
+	overflow-y: scroll;
+	position: absolute;
+}

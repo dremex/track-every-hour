@@ -90,6 +90,11 @@
 </script>
 
 <style>
+
+    .activity-type-list {
+        top: 190px;
+    }
+
     .fab {
         border-radius: 50%;
         box-shadow: 0 6px 10px 0 #666;
@@ -127,6 +132,7 @@
         bottom: 80px;
         background-color: red;
     }
+
 </style>
 
 <main>
@@ -134,17 +140,19 @@
 
     <input bind:value={notes} placeholder='Optional Notes'>
 
-    {#each Object.entries($activityTypes.activityTypes) as [activityTypeId, activityType]}
-        <Activity
-            header={activityType.name}
-            notes={'0 this week'}
-            activityType={{
-                ...activityType,
-                'color': activityTypeId === selectedActivityTypeId ? activityType.color : 'EEECEC',
-            }}
-            on:activityClicked={() => handleActivityTypeSelected(activityTypeId)}
-        />
-    {/each}
+    <div class='scrollable activity-type-list'>
+        {#each Object.entries($activityTypes.activityTypes) as [activityTypeId, activityType]}
+            <Activity
+                header={activityType.name}
+                notes={'0 this week'}
+                activityType={{
+                    ...activityType,
+                    'color': activityTypeId === selectedActivityTypeId ? activityType.color : 'EEECEC',
+                }}
+                on:activityClicked={() => handleActivityTypeSelected(activityTypeId)}
+            />
+        {/each}
+    </div>
 
     {#if viewState.action === 'edit'}
         <div id='deleteActivityButton' class='fab fab-small' on:click={() => handleDeleteActivity()}>

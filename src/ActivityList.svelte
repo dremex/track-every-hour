@@ -28,6 +28,7 @@
 </script>
 
 <style>
+
 	h2 {
 		margin-top: 18px;
 		text-align: left;
@@ -56,6 +57,11 @@
 		display: block;
 		margin-top: 5px;
 	}
+
+	.activity-list {
+		top: 175px;
+	}
+
 </style>
 
 <div>
@@ -70,21 +76,23 @@
 		{/each}
 	</div>
 
-	{#each Array(24) as _, i}
-		{#if $activityStore.activities[formatDate($currentDate)] && $activityStore.activities[formatDate($currentDate)][i]}
-			<Activity
-				header={formatHour(i)}
-				notes={$activityStore.activities[formatDate($currentDate)][i].notes}
-				activityType={$activityTypes.activityTypes[$activityStore.activities[formatDate($currentDate)][i].activityTypeId]}
-				on:activityClicked={() => window.location = `#/activities/edit/${formatDate($currentDate)}/${i}`}
-			/>
-		{:else}
-			<Activity
-				header={formatHour(i)}
-				notes={null}
-				activityType={null}
-				on:activityClicked={() => window.location = `#/activities/add/${formatDate($currentDate)}/${i}`}
-			/>
-		{/if}
-	{/each}
+	<div class='scrollable activity-list'>
+		{#each Array(24) as _, i}
+			{#if $activityStore.activities[formatDate($currentDate)] && $activityStore.activities[formatDate($currentDate)][i]}
+				<Activity
+					header={formatHour(i)}
+					notes={$activityStore.activities[formatDate($currentDate)][i].notes}
+					activityType={$activityTypes.activityTypes[$activityStore.activities[formatDate($currentDate)][i].activityTypeId]}
+					on:activityClicked={() => window.location = `#/activities/edit/${formatDate($currentDate)}/${i}`}
+				/>
+			{:else}
+				<Activity
+					header={formatHour(i)}
+					notes={null}
+					activityType={null}
+					on:activityClicked={() => window.location = `#/activities/add/${formatDate($currentDate)}/${i}`}
+				/>
+			{/if}
+		{/each}
+	</div>
 </div>
