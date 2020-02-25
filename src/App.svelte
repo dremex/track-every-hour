@@ -8,6 +8,7 @@
 
 	import { activityTypes, activityStore, currentDate } from './stores.js'
 
+	import AppHeader from './AppHeader.svelte'
 	import AddEditActivity from './AddEditActivity.svelte'
 	import ActivityList from './ActivityList.svelte'
 	import ActivityTypeList from './ActivityTypeList.svelte'
@@ -69,21 +70,22 @@
 	{#if appInitializing}
 		<p>APP LOADING</p>
 	{:else}
-		<a href="#/activities">Activities</a><br>
-		<a href="#/activityTypes">Activity Types</a><hr>
+		<AppHeader atRoot={page === 'activities'} />
 
-		{#if page === 'activityTypes'}
-			<ActivityTypeList />
-		{:else if page === 'addActivity'}
-			<AddEditActivity />
-		{:else}
-			<ActivityList />
-		{/if}
+		<div class='app-content'>
+			{#if page === 'activityTypes'}
+				<ActivityTypeList />
+			{:else if page === 'addActivity'}
+				<AddEditActivity />
+			{:else}
+				<ActivityList />
+			{/if}
+		</div>
 	{/if}
 </div>
 
 <style>
-	.app-root {
+	.app-content {
 		text-align: center;
 		padding-left: 10px;
 		padding-right: 10px;
