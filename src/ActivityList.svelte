@@ -5,46 +5,77 @@
 	import { startOfWeek, endOfWeek } from 'date-fns'
 	import { formatDate, formatHour, setupNewDate } from './helpers/utils'
 
-	import { activityStore, activityTypes, currentDate } from './stores.js'
+	import { activityStore, activityTypes, currentDate, currentWeek } from './stores.js'
 
-	import Activity from './Activity.svelte';
+	import Activity from './Activity.svelte'
+	import ActivitySkeleton from './ActivitySkeleton.svelte'
 	import Swipe from 'swipejs'
 
-	let days = buildDaysBar()
+	import firebase from './helpers/firebase'
+	import 'firebase/database'
 
-	function buildDaysBar() {
-		const days = []
-		const date = new Date($currentDate.getTime())
-		const startOfWeek = new Date(date.setDate(date.getDate() - date.getDay()))
+	function buildSwipeConfig(startSlide) {
+		return {
+			draggable: true,
+			continuous: false,
+			stopPropagation: true,
+			startSlide: startSlide,
+			callback: function(index, element) {
+				if (index === 0) {
+					transitionWeek('PAST')
+					return
+				}
 
-		for (let i = 0; i < 7; i++) {
-			let date = new Date(startOfWeek.getTime())
-			date.setDate(date.getDate() + i)
+				if (index === 8) {
+					transitionWeek('FUTURE')
+					return
+				}
 
-			days.push(date)
+				$currentDate = $currentWeek[index - 1]
+			}
+		}
+	}
+
+	function initSwiper() {
+		if (window.mySwipe) {
+			window.mySwipe.kill()
 		}
 
-		return days
+		var element = document.getElementById('slider')
+		window.mySwipe = new Swipe(element, buildSwipeConfig($currentDate.getDay() + 1))
 	}
 
 	function handleDayChange(newDay) {
 		$currentDate = newDay
 
-		window.mySwipe.slide($currentDate.getDay())
+		window.mySwipe.slide($currentDate.getDay() + 1)
 	}
 
-	onMount(() => {
-		var element = document.getElementById('slider');
-		window.mySwipe = new Swipe(element, {
-			draggable: true,
-			continuous: false,
-			stopPropagation: true,
-			startSlide: $currentDate.getDay(),
-			callback: function(index, element) {
-				$currentDate = days[index]
-			}
-		});
-	})
+	async function transitionWeek(direction) {
+		const newDayOffset = direction === 'PAST' ? -1 : 1
+		const date = new Date($currentDate.getTime())
+		date.setDate(date.getDate() + newDayOffset)
+
+		$currentDate = date
+
+		$activityStore = {
+			'lastFetched': new Date(),
+			activities: await firebase
+				.database()
+				.ref(`/activities`)
+				.orderByKey()
+				.startAt(formatDate(startOfWeek($currentDate)))
+				.endAt(formatDate(endOfWeek($currentDate)))
+				.once('value')
+				.then(function(snapshot) {
+					return snapshot.val() || {}
+				})
+		}
+
+		initSwiper()
+	}
+
+	onMount(() => initSwiper())
 </script>
 
 <style>
@@ -106,7 +137,7 @@
 	<h2>{MONTHS[$currentDate.getMonth()]}</h2>
 
 	<div class='day-block'>
-		{#each days as date, i}
+		{#each $currentWeek as date, i}
 			<div class='{i == $currentDate.getDay() ? 'day active' : 'day'}' on:click={() => handleDayChange(date)}>
 				<span class='day-of-week'>{DAYS[date.getDay()]}</span>
 				<span class='day-of-month'>{date.getDate()}</span>
@@ -117,7 +148,12 @@
 	<div class='scrollable activity-list'>
 		<div id='slider' class='swipe'>
 			<div class='swipe-wrap'>
-				{#each days as day, dayIndex}
+				<div>
+					{#each Array(12) as _, i}
+						<ActivitySkeleton />
+					{/each}
+				</div>
+				{#each $currentWeek as day, dayIndex}
 					<div>
 						{#each Array(24) as _, i}
 							{#if $activityStore.activities[formatDate(day)] && $activityStore.activities[formatDate(day)][i]}
@@ -138,6 +174,11 @@
 						{/each}
 					</div>
 				{/each}
+				<div>
+					{#each Array(12) as _, i}
+						<ActivitySkeleton />
+					{/each}
+				</div>
 			</div>
 		</div>
 	</div>
