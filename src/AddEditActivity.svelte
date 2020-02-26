@@ -1,5 +1,5 @@
 <script>
-    import { activityStore, activityTypes, currentDate } from './stores.js'
+    import { activityStore, activityTypes, currentDate, activityTypeStore } from './stores.js'
     import firebase from './helpers/firebase'
     import 'firebase/database'
     
@@ -141,15 +141,15 @@
     <input bind:value={notes} placeholder='Optional Notes'>
 
     <div class='scrollable activity-type-list'>
-        {#each Object.entries($activityTypes.activityTypes) as [activityTypeId, activityType]}
+        {#each $activityTypeStore as activityType}
             <Activity
                 header={activityType.name}
-                notes={'0 this week'}
+                notes={`${activityType.usedThisWeek} this week`}
                 activityType={{
                     ...activityType,
-                    'color': activityTypeId === selectedActivityTypeId ? activityType.color : 'EEECEC',
+                    'color': activityType.id === selectedActivityTypeId ? activityType.color : 'EEECEC',
                 }}
-                on:activityClicked={() => handleActivityTypeSelected(activityTypeId)}
+                on:activityClicked={() => handleActivityTypeSelected(activityType.id)}
             />
         {/each}
     </div>
