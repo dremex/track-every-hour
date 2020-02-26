@@ -20,6 +20,7 @@
     "tinycolor2": "^1.4.1"
   },
   "dependencies": {
-    "sirv-cli": "^0.4.5"
+    "sirv-cli": "^0.4.5",
+    "swipejs": "^2.2.14"
   }
 }

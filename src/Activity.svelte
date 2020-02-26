@@ -10,8 +10,9 @@
 <style>
   .row {
     display: flex;
-    width: 100%;
+    width: calc(100% - 24px);
     margin-top: 5px;
+    margin-left: 13px;
     border-radius: 10px;
     overflow: hidden;
   }
