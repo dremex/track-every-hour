@@ -78,6 +78,10 @@
 		margin-top: 5px;
 	}
 
+	.activity-list {
+		top: 170px;
+	}
+
 	.swipe {
 		overflow: hidden;
 		visibility: hidden;
@@ -85,7 +89,6 @@
 	}
 
 	.swipe-wrap {
-		padding-top: 8px;
 		overflow: hidden;
 		position: relative;
 	}
@@ -111,29 +114,31 @@
 		{/each}
 	</div>
 
-	<div id='slider' class='swipe'>
-  		<div class='swipe-wrap'>
-			{#each days as day, dayIndex}
-				<div class='scrollable'>
-					{#each Array(24) as _, i}
-						{#if $activityStore.activities[formatDate(day)] && $activityStore.activities[formatDate(day)][i]}
-							<Activity
-								header={formatHour(i)}
-								notes={$activityStore.activities[formatDate(day)][i].notes}
-								activityType={$activityTypes.activityTypes[$activityStore.activities[formatDate(day)][i].activityTypeId]}
-								on:activityClicked={() => window.location = `#/activities/edit/${formatDate(day)}/${i}`}
-							/>
-						{:else}
-							<Activity
-								header={formatHour(i)}
-								notes={null}
-								activityType={null}
-								on:activityClicked={() => window.location = `#/activities/add/${formatDate(day)}/${i}`}
-							/>
-						{/if}
-					{/each}
-				</div>
-			{/each}
+	<div class='scrollable activity-list'>
+		<div id='slider' class='swipe'>
+			<div class='swipe-wrap'>
+				{#each days as day, dayIndex}
+					<div>
+						{#each Array(24) as _, i}
+							{#if $activityStore.activities[formatDate(day)] && $activityStore.activities[formatDate(day)][i]}
+								<Activity
+									header={formatHour(i)}
+									notes={$activityStore.activities[formatDate(day)][i].notes}
+									activityType={$activityTypes.activityTypes[$activityStore.activities[formatDate(day)][i].activityTypeId]}
+									on:activityClicked={() => window.location = `#/activities/edit/${formatDate(day)}/${i}`}
+								/>
+							{:else}
+								<Activity
+									header={formatHour(i)}
+									notes={null}
+									activityType={null}
+									on:activityClicked={() => window.location = `#/activities/add/${formatDate(day)}/${i}`}
+								/>
+							{/if}
+						{/each}
+					</div>
+				{/each}
+			</div>
 		</div>
 	</div>
 </div>

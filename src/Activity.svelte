@@ -10,19 +10,12 @@
 <style>
   .row {
     display: flex;
+    height: 65px;
     width: calc(100% - 24px);
     margin-top: 5px;
     margin-left: 13px;
     border-radius: 10px;
     overflow: hidden;
-  }
-
-  .activity-row {
-    height: 65px;
-  }
-
-  .placeholder-row {
-    height: 50px;
   }
 
   .icon-container {
@@ -74,7 +67,7 @@
   }
 </style>
 
-<div class='row {activityType ? 'activity-row' : 'placeholder-row'}' on:click={() => dispatch('activityClicked')}>
+<div class='row' on:click={() => dispatch('activityClicked')}>
     {#if activityType}
       <div class='icon-container' style='background-color: #{activityType.color}'>
         <img src='/icons/activityTypes/{activityType.icon}.svg' class='icon' alt='{activityType.name}' />
