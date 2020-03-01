@@ -9,7 +9,7 @@
 	import { activityTypes, activityStore, currentDate } from './stores.js'
 
 	import AppHeader from './AppHeader.svelte'
-	import AddEditActivity from './AddEditActivity.svelte'
+	import MutateActivity from './MutateActivity.svelte'
 	import ActivityList from './ActivityList.svelte'
 	import ActivityTypeList from './ActivityTypeList.svelte'
 	
@@ -80,7 +80,7 @@
 			{#if page === 'activityTypes'}
 				<ActivityTypeList />
 			{:else if page === 'addActivity'}
-				<AddEditActivity />
+				<MutateActivity />
 			{:else}
 				<ActivityList />
 			{/if}
