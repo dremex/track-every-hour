@@ -1,8 +1,13 @@
 <script>
+    import { menuExpanded } from './stores/appStore.js'
+
     export let atRoot
 
-    function backButtonPressed() {
-        if (atRoot) return
+    function handleNavIconClicked() {
+        if (atRoot) {
+            menuExpanded.set(!$menuExpanded)
+            return
+        }
 
         window.history.back()
         window.scrollTo(0, 0)
@@ -17,6 +22,7 @@
 
     #top-navigation {
         width: 100%;
+        min-height: 50px;
         margin: auto;
         color: #FFF;
         font-size: 20px;
@@ -25,8 +31,10 @@
         box-shadow: 0 1px 4px #333;
     }
 
-    #top-navigation span {
+    #top-navigation a {
+        color: #FFF;
         position: absolute;
+        text-decoration: none;
         top: 10px;
     }
 
@@ -45,14 +53,6 @@
         margin: 0;
         overflow: visible;
         transform: scale(.5);
-    }
-
-    .hamburger:hover {
-        opacity: 0.7;
-    }
-
-    .hamburger.is-active:hover {
-        opacity: 0.7;
     }
 
     .hamburger.is-active .hamburger-inner,
@@ -106,15 +106,54 @@
         transform: translate3d(-8px, 0, 0) rotate(45deg) scale(0.7, 1);
     }
 
+    .hamburger--squeeze .hamburger-inner {
+        transition-duration: 0.075s;
+        transition-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    }
+
+    .hamburger--squeeze .hamburger-inner::before {
+        transition: top 0.075s 0.12s ease, opacity 0.075s ease;
+    }
+
+    .hamburger--squeeze .hamburger-inner::after {
+        transition: bottom 0.075s 0.12s ease, transform 0.075s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    }
+
+    .hamburger--squeeze.is-active .hamburger-inner {
+        transform: rotate(45deg);
+        transition-delay: 0.12s;
+        transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+
+    .hamburger--squeeze.is-active .hamburger-inner::before {
+        top: 0;
+        opacity: 0;
+        transition: top 0.075s ease, opacity 0.075s 0.12s ease;
+    }
+
+    .hamburger--squeeze.is-active .hamburger-inner::after {
+        bottom: 0;
+        transform: rotate(-90deg);
+        transition: bottom 0.075s ease, transform 0.075s 0.12s cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+
+    @media only screen and (min-width: 768px) {
+        .hamburger {
+            display: none;
+        }
+
+        #top-navigation a {
+            left: 20px;
+        }
+    }
+
 </style>
 
 <nav id='top-navigation'>
-    <div class='hamburger hamburger--arrow {atRoot ? '' : 'is-active'}' on:click={backButtonPressed}>
+    <div class='hamburger {atRoot ? '' : 'hamburger--arrow is-active'} {$menuExpanded ? 'hamburger--squeeze is-active' : ''}' on:click={handleNavIconClicked}>
         <div class='hamburger-box'>
             <div class='hamburger-inner'></div>
         </div>
     </div>
-    <span>Track Every Hour</span>
-    <!-- <a href="#/activities">Activities</a><br>
-    <a href="#/activityTypes">Activity Types</a><hr> -->
+    <a href='/#/activities'>Track Every Hour</a>
 </nav>

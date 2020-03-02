@@ -5,7 +5,8 @@
 	import { startOfWeek, endOfWeek } from 'date-fns'
 	import { formatDate, formatHour, setupNewDate } from './helpers/utils'
 
-	import { activityStore, activityTypes, currentDate, currentWeek } from './stores.js'
+	import { activityStore, activityTypes } from './stores/activityStore.js'
+	import { currentDate, currentWeek } from './stores/appStore.js'
 
 	import Activity from './Activity.svelte'
 	import ActivitySkeleton from './ActivitySkeleton.svelte'

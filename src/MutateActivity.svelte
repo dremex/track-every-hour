@@ -1,5 +1,6 @@
 <script>
-    import { activityStore, activityTypes, currentDate, activityTypeStore } from './stores.js'
+    import { currentDate } from './stores/appStore.js'
+    import { activityStore, activityTypes, activityTypeStore } from './stores/activityStore.js'
     import firebase from './helpers/firebase'
     import 'firebase/database'
     

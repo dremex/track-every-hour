@@ -1,5 +1,5 @@
 <script>
-    import { activityTypes } from './stores.js'
+    import { activityTypes } from './stores/activityStore.js'
 
     import Activity from './Activity.svelte'
 </script>

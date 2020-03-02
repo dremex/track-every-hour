@@ -6,9 +6,11 @@
 	import { startOfWeek, endOfWeek } from 'date-fns'
 	import { formatDate, formatHour } from './helpers/utils'
 
-	import { activityTypes, activityStore, currentDate } from './stores.js'
+	import { currentDate } from './stores/appStore.js'
+	import { activityTypes, activityStore } from './stores/activityStore.js'
 
 	import AppHeader from './AppHeader.svelte'
+	import AppMenu from './AppMenu.svelte'
 	import MutateActivity from './MutateActivity.svelte'
 	import ActivityList from './ActivityList.svelte'
 	import ActivityTypeList from './ActivityTypeList.svelte'
@@ -75,6 +77,7 @@
 		<p>APP LOADING</p>
 	{:else}
 		<AppHeader atRoot={page === 'activities'} />
+		<AppMenu />
 
 		<div class='app-content'>
 			{#if page === 'activityTypes'}
@@ -95,5 +98,12 @@
 		padding-right: 10px;
 		padding-bottom: 10px;
 		margin: 0 auto;
+	}
+
+	@media only screen and (min-width: 768px) {
+		.app-content {
+			width: calc(100% - var(--side-menu-width-offset));
+			margin-left: var(--side-menu-width);
+		}
 	}
 </style>

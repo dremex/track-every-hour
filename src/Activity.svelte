@@ -65,6 +65,14 @@
     overflow: inherit;
     color: #666666;
   }
+
+  @media only screen and (min-width: 768px) {
+    .row {
+      width: 100%;
+      width: calc(100% - var(--side-menu-width-offset));
+    }
+  }
+
 </style>
 
 <div class='row' on:click={() => dispatch('activityClicked')}>

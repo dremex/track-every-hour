@@ -1,3 +1,8 @@
+:root {
+	--side-menu-width: 250px;
+	--side-menu-width-offset: 270px;
+}
+
 html, body {
 	position: relative;
 	width: 100%;
@@ -11,7 +16,7 @@ body {
 }
 
 a {
-	color: rgb(0,100,200);
+	color: rgb(0, 100, 200);
 	text-decoration: none;
 }
 
