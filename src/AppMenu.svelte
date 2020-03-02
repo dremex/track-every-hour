@@ -48,4 +48,7 @@
 
 <div class='sidenav {$menuExpanded ? 'active' : ''}'>
     <a href='#/activityTypes' on:click={() => handleMenuItemClick()}>Activity Types</a>
+
+    Reports
+    <a href='#/reports/weekly' on:click={() => handleMenuItemClick()}>Weekly</a>
 </div>

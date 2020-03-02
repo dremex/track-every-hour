@@ -14,7 +14,8 @@
 	import MutateActivity from './MutateActivity.svelte'
 	import ActivityList from './ActivityList.svelte'
 	import ActivityTypeList from './ActivityTypeList.svelte'
-	
+	import WeeklyReport from './views/reports/WeeklyReport.svelte'
+
 	let page = 'activities'
 
 	export let appInitializing = true
@@ -62,6 +63,8 @@
 			page = 'activityTypes'
 		} else if (path.startsWith('/activities/add') || path.startsWith('/activities/edit')) {
 			page = 'addActivity'
+		} else if (path.startsWith('/reports/weekly')) {
+			page = 'weeklyReport'
 		} else {
 			page = 'activities'
 		}
@@ -84,6 +87,8 @@
 				<ActivityTypeList />
 			{:else if page === 'addActivity'}
 				<MutateActivity />
+			{:else if page === 'weeklyReport'}
+				<WeeklyReport />
 			{:else}
 				<ActivityList />
 			{/if}
