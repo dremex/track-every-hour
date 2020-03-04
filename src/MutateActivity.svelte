@@ -26,10 +26,7 @@
 
         await firebase.database().ref(`activities/${date}/${hour}`).remove()
 
-        const activities = JSON.parse(JSON.stringify($activityStore.activities))
-        delete activities[date][hour]
-
-        $activityStore.activities = activities
+        activityStore.deleteActivity(date, hour)
 
         // TODO: Success Toast
         console.log('deleted!')
@@ -51,18 +48,7 @@
             activityTypeId: selectedActivityTypeId
         })
 
-        const activities = JSON.parse(JSON.stringify($activityStore.activities))
-
-        if (!activities[date]) {
-            activities[date] = []
-        }
-
-        activities[date][hour] = {
-            notes,
-            activityTypeId: selectedActivityTypeId,
-        }
-
-        $activityStore.activities = activities
+        activityStore.addActivity(date, hour, selectedActivityTypeId, notes)
 
         // TODO: Success Toast
         console.log('saved!')

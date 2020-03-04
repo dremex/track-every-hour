@@ -1,9 +1,48 @@
 import { writable, derived } from 'svelte/store'
 
-export const activityStore = writable({
-    activities: null,
-    lastFetched: null,
-})
+function createActivityStore() {
+   const { subscribe, set, update } = writable({
+        activities: null,
+        lastFetched: null,
+    })
+
+    const addActivity = (date, hour, activityTypeId, notes) => update(n => {
+        const activities = JSON.parse(JSON.stringify(n.activities))
+
+        if (!activities[date]) {
+            activities[date] = []
+        }
+
+        activities[date][hour] = {
+            notes,
+            activityTypeId,
+        }
+
+        return n = {
+            activities: activities,
+            lastFetched: n.lastFetched
+        }
+    })
+
+    const deleteActivity = (date, hour) => update(n => {
+        const activities = JSON.parse(JSON.stringify(n.activities))
+        delete activities[date][hour]
+
+        return n = {
+            activities: activities,
+            lastFetched: n.lastFetched
+        }
+    })
+
+    return {
+        set,
+        subscribe,
+        addActivity,
+        deleteActivity,
+	}
+}
+
+export const activityStore = createActivityStore()
 
 export const activityTypes = writable({
     lastFetched: null,
@@ -25,6 +64,7 @@ export const activityTypeStore = derived([activityStore, activityTypes], ([$acti
 
     Object.keys($activityStore.activities).forEach((day) => {
         $activityStore.activities[day].forEach((activity) => {
+            if (!activity) return
             results.find(activityType => activityType.id === activity.activityTypeId).usedThisWeek++
         })
     })

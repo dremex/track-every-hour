@@ -1,5 +1,5 @@
 <script>
-	import { onMount } from 'svelte';
+	import { onMount } from 'svelte'
 	import firebase from './helpers/firebase'
 	import 'firebase/database'
 
@@ -21,7 +21,7 @@
 
 	async function initialize() {
 		if (!$activityTypes.lastFetched) {
-			$activityTypes = {
+			activityTypes.set({
 				'lastFetched': new Date(),
 				'activityTypes': await firebase
 					.database()
@@ -31,11 +31,11 @@
 					.then(function(snapshot) {
 					return snapshot.val() || []
 				})
-			}
+			})
 		}
 
 		if (!$activityStore.lastFetched) {
-			$activityStore = {
+			activityStore.set({
 				'lastFetched': new Date(),
 				activities: await firebase
 					.database()
@@ -47,7 +47,7 @@
 					.then(function(snapshot) {
 						return snapshot.val() || {}
 					})
-			}
+			})
 		}
 
 		onHashChange()
