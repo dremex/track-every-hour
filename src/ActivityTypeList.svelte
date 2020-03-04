@@ -1,5 +1,5 @@
 <script>
-    import { activityTypes } from './stores/activityStore.js'
+    import { activityTypeStore } from './stores/activityStore.js'
 
     import Activity from './Activity.svelte'
 </script>
@@ -16,10 +16,10 @@
     <h1>Activity Types</h1>
 
     <div class='scrollable activity-type-list'>
-        {#each Object.entries($activityTypes.activityTypes) as [activityTypeId, activityType]}
+        {#each $activityTypeStore as activityType}
             <Activity
                 header={activityType.name}
-                notes={'0 this week'}
+                notes={`${activityType.usedThisWeek} hours this week`}
                 activityType={activityType}
                 on:activityClicked={() => console.log('clicked')}
             />

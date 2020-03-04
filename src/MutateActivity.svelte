@@ -131,7 +131,7 @@
         {#each $activityTypeStore as activityType}
             <Activity
                 header={activityType.name}
-                notes={`${activityType.usedThisWeek} this week`}
+                notes={`${activityType.usedThisWeek} hours this week`}
                 activityType={{
                     ...activityType,
                     'color': activityType.id === selectedActivityTypeId ? activityType.color : 'EEECEC',
