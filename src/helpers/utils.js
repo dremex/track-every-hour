@@ -10,7 +10,7 @@ export function formatDate(date = new Date()) {
 
 export function formatHour(hour) {
   const suffix = hour >= 12 ? 'pm' : 'am'
-  const formattedHour = (hour + 11) % 12 + 1
+  const formattedHour = ((hour + 11) % 12) + 1
 
   return formattedHour + ' ' + suffix
 }

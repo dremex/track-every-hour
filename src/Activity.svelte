@@ -1,10 +1,10 @@
 <script>
-    import { createEventDispatcher } from 'svelte'
-    const dispatch = createEventDispatcher()
-    
-    export let header
-    export let notes
-    export let activityType
+  import { createEventDispatcher } from 'svelte'
+  const dispatch = createEventDispatcher()
+
+  export let header
+  export let notes
+  export let activityType
 </script>
 
 <style>
@@ -72,21 +72,20 @@
       width: calc(100% - var(--side-menu-width-offset));
     }
   }
-
 </style>
 
-<div class='row' on:click={() => dispatch('activityClicked')}>
-    {#if activityType}
-      <div class='icon-container' style='background-color: #{activityType.color}'>
-        <img src='/icons/activityTypes/{activityType.icon}.svg' class='icon' alt='{activityType.name}' />
-      </div>
-      <div class='label' style='background-color: #{activityType.colorAccent}'>
-        <h2>{header}</h2>
-        <p>{notes}</p>
-      </div>
-    {:else}
-      <div class='label'>
-          <h2 class='placeholder'>{header}</h2>
-      </div>
-    {/if}
+<div class="row" on:click={() => dispatch('activityClicked')}>
+  {#if activityType}
+    <div class="icon-container" style="background-color: #{activityType.color}">
+      <img src="/icons/activityTypes/{activityType.icon}.svg" class="icon" alt={activityType.name} />
+    </div>
+    <div class="label" style="background-color: #{activityType.colorAccent}">
+      <h2>{header}</h2>
+      <p>{notes}</p>
+    </div>
+  {:else}
+    <div class="label">
+      <h2 class="placeholder">{header}</h2>
+    </div>
+  {/if}
 </div>
