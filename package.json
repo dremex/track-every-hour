@@ -5,12 +5,16 @@
     "build": "rm -rf ./public/build && rm -rf ./node_modules && npm i && rollup -c",
     "dev": "rollup -c -w",
     "start": "sirv public -s",
-    "deploy": "npm run build && firebase deploy"
+    "deploy": "npm run build && firebase deploy",
+    "lint": "eslint --fix --quiet src --ext .js,.svelte"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^11.0.0",
     "@rollup/plugin-node-resolve": "^7.0.0",
     "date-fns": "^2.9.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-svelte3": "^2.7.3",
     "firebase": "^7.8.0",
     "rollup": "^1.20.0",
     "rollup-plugin-livereload": "^1.0.0",

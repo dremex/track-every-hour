@@ -4,7 +4,7 @@
 	import 'firebase/database'
 
 	import { startOfWeek, endOfWeek } from 'date-fns'
-	import { formatDate, formatHour } from './helpers/utils'
+	import { formatDate } from './helpers/utils'
 
 	import { currentDate } from './stores/appStore.js'
 	import { activityTypes, activityStore } from './stores/activityStore.js'

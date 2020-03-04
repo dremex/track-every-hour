@@ -3,7 +3,7 @@
 
 	import { DAYS, MONTHS } from './helpers/constants'
 	import { startOfWeek, endOfWeek } from 'date-fns'
-	import { formatDate, formatHour, setupNewDate } from './helpers/utils'
+	import { formatDate, formatHour } from './helpers/utils'
 
 	import { activityStore, activityTypes } from './stores/activityStore.js'
 	import { currentDate, currentWeek } from './stores/appStore.js'
@@ -21,7 +21,7 @@
 			continuous: false,
 			stopPropagation: true,
 			startSlide: startSlide,
-			callback: function(index, element) {
+			callback: function(index) {
 				if (index === 0) {
 					transitionWeek('PAST')
 					return
