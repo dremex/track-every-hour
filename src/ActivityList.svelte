@@ -38,7 +38,7 @@
 	}
 
 	function initSwiper() {
-		if (window.mySwipe) {
+		if (window.mySwipe && window.mySwipe.kill) {
 			window.mySwipe.kill()
 		}
 
