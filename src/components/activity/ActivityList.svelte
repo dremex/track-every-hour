@@ -1,18 +1,20 @@
 <script>
   import { onMount } from 'svelte'
 
-  import { DAYS, MONTHS } from './helpers/constants'
-  import { startOfWeek, endOfWeek } from 'date-fns'
-  import { formatDate, formatHour } from './helpers/utils'
-
-  import { activityStore, activityTypes } from './stores/activityStore.js'
-  import { currentDate, currentWeek } from './stores/appStore.js'
-
   import Activity from './Activity.svelte'
-  import ActivitySkeleton from './ActivitySkeleton.svelte'
-  import Swipe from 'swipejs'
+  import ActivityPlaceholder from './ActivityPlaceholder.svelte'
+  import ActivitySkeleton from '../loadingSkeletons/ActivitySkeleton.svelte'
 
-  import firebase from './helpers/firebase'
+  import { currentDate, currentWeek } from '../../stores/appStore.js'
+  import { activityStore, activityTypes } from '../../stores/activityStore.js'
+
+  import { formatDate } from '../../helpers/utils'
+  import { DAYS, MONTHS } from '../../helpers/constants'
+
+  import Swipe from 'swipejs'
+  import { startOfWeek, endOfWeek } from 'date-fns'
+
+  import firebase from '../../helpers/firebase'
   import 'firebase/database'
 
   function buildSwipeConfig(startSlide) {
@@ -157,16 +159,15 @@
             {#each Array(24) as _, i}
               {#if $activityStore.activities[formatDate(day)] && $activityStore.activities[formatDate(day)][i]}
                 <Activity
-                  header={formatHour(i)}
+                  hour={i}
                   notes={$activityStore.activities[formatDate(day)][i].notes}
                   activityType={$activityTypes.activityTypes[$activityStore.activities[formatDate(day)][i].activityTypeId]}
                   on:activityClicked={() => (window.location = `#/activities/edit/${formatDate(day)}/${i}`)} />
               {:else}
-                <Activity
-                  header={formatHour(i)}
-                  notes={null}
-                  activityType={null}
-                  on:activityClicked={() => (window.location = `#/activities/add/${formatDate(day)}/${i}`)} />
+                <ActivityPlaceholder
+                  hour={i}
+                  day={formatDate(day)}
+                  on:activityPlaceholderClicked={() => (window.location = `#/activities/add/${formatDate(day)}/${i}`)} />
               {/if}
             {/each}
           </div>

@@ -1,19 +1,20 @@
 <script>
   import { onMount } from 'svelte'
-  import firebase from './helpers/firebase'
-  import 'firebase/database'
-
-  import { startOfWeek, endOfWeek } from 'date-fns'
-  import { formatDate } from './helpers/utils'
-
-  import { currentDate } from './stores/appStore.js'
-  import { activityTypes, activityStore } from './stores/activityStore.js'
 
   import AppHeader from './AppHeader.svelte'
   import AppMenu from './AppMenu.svelte'
-  import MutateActivity from './MutateActivity.svelte'
-  import ActivityList from './ActivityList.svelte'
-  import ActivityTypeList from './ActivityTypeList.svelte'
+  import MutateActivity from '../activity/MutateActivity.svelte'
+  import ActivityList from '../activity/ActivityList.svelte'
+  import ActivityTypeList from '../activityType/ActivityTypeList.svelte'
+
+  import { currentDate } from '../../stores/appStore.js'
+  import { activityTypes, activityStore } from '../../stores/activityStore.js'
+
+  import { startOfWeek, endOfWeek } from 'date-fns'
+  import { formatDate } from '../../helpers/utils'
+
+  import firebase from '../../helpers/firebase'
+  import 'firebase/database'
 
   let page = 'activities'
 

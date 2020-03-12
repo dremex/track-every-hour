@@ -75,3 +75,28 @@ button:focus {
 	overflow-y: scroll;
 	position: absolute;
 }
+
+.activity-icon {
+  display: flex;
+  flex-grow: 2;
+  height: 32px;
+  width: 32px;
+  margin: 0 auto;
+  display: block;
+}
+
+.activity-icon-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-width: 52px;
+  height: 100%;
+}
+
+.activity-content-container {
+  width: 100%;
+  background: #eeecec;
+  padding-left: 10px;
+  text-align: left;
+}

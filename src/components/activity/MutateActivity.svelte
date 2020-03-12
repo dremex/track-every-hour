@@ -1,13 +1,15 @@
 <script>
-  import { currentDate } from './stores/appStore.js'
-  import { activityStore, activityTypeStore } from './stores/activityStore.js'
-  import firebase from './helpers/firebase'
-  import 'firebase/database'
-
   import { onMount } from 'svelte'
-  import Activity from './Activity.svelte'
 
-  import { formatDate } from './helpers/utils'
+  import ActivityType from '../activityType/ActivityType.svelte'
+
+  import { currentDate } from '../../stores/appStore.js'
+  import { activityStore, activityTypeStore } from '../../stores/activityStore.js'
+
+  import { formatDate } from '../../helpers/utils'
+
+  import firebase from '../../helpers/firebase'
+  import 'firebase/database'
 
   let notes = ''
   let viewState = {}
@@ -132,11 +134,10 @@
 
   <div class="scrollable activity-type-list">
     {#each $activityTypeStore as activityType}
-      <Activity
-        header={activityType.name}
-        notes={`${activityType.usedThisWeek} hours this week`}
+      <ActivityType
         activityType={{ ...activityType, color: activityType.id === selectedActivityTypeId ? activityType.color : 'EEECEC' }}
-        on:activityClicked={() => handleActivityTypeSelected(activityType.id)} />
+        notes={`${activityType.usedThisWeek} hours this week`}
+        on:activityTypeClicked={() => handleActivityTypeSelected(activityType.id)} />
     {/each}
   </div>
 

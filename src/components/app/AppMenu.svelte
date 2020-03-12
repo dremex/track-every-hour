@@ -1,5 +1,5 @@
 <script>
-  import { menuExpanded } from './stores/appStore.js'
+  import { menuExpanded } from '../../stores/appStore.js'
 
   function handleMenuItemClick() {
     menuExpanded.set(!$menuExpanded)

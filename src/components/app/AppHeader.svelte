@@ -1,5 +1,5 @@
 <script>
-  import { menuExpanded } from './stores/appStore.js'
+  import { menuExpanded } from '../../stores/appStore.js'
 
   export let atRoot
 

@@ -1,7 +1,3 @@
-<script>
-
-</script>
-
 <style>
   .skeleton-box {
     display: inline-block;
