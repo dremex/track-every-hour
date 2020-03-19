@@ -166,7 +166,6 @@
               {:else}
                 <ActivityPlaceholder
                   hour={i}
-                  day={formatDate(day)}
                   on:activityPlaceholderClicked={() => (window.location = `#/activities/add/${formatDate(day)}/${i}`)} />
               {/if}
             {/each}

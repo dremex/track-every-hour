@@ -4,7 +4,6 @@
 
   import { formatHour } from '../../helpers/utils'
 
-  export let day
   export let hour
 
   const dispatch = createEventDispatcher()
