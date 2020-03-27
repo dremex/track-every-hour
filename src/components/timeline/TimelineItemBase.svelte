@@ -1,7 +1,19 @@
+<script>
+
+  export let activityCount = 1
+
+  function computeRowHeight() {
+    const rowTopMargin = 5
+    const singleRowHeight = 70
+
+    return activityCount * singleRowHeight - rowTopMargin
+  }
+
+</script>
+
 <style>
-  .row {
+  .timeline-item {
     display: flex;
-    height: 65px;
     width: calc(100% - 24px);
     margin-top: 5px;
     margin-left: 13px;
@@ -10,14 +22,14 @@
   }
 
   @media only screen and (min-width: 768px) {
-    .row {
+    .timeline-item {
       width: 100%;
       width: calc(100% - var(--side-menu-width-offset));
     }
   }
 </style>
 
-<div class="row">
+<div class="timeline-item" style="height: {computeRowHeight()}px;">
   <slot name="icon" />
   <slot name="content" />
 </div>

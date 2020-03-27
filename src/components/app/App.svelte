@@ -3,8 +3,8 @@
 
   import AppHeader from './AppHeader.svelte'
   import AppMenu from './AppMenu.svelte'
-  import MutateActivity from '../activity/MutateActivity.svelte'
-  import ActivityList from '../activity/ActivityList.svelte'
+  import MutateActivity from '../mutateActivity/MutateActivity.svelte'
+  import Timeline from '../timeline/Timeline.svelte'
   import ActivityTypeList from '../activityType/ActivityTypeList.svelte'
 
   import { currentDate } from '../../stores/appStore.js'
@@ -103,7 +103,7 @@
       {:else if page === 'addActivity'}
         <MutateActivity />
       {:else}
-        <ActivityList />
+        <Timeline />
       {/if}
     </div>
   {/if}

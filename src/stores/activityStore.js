@@ -1,5 +1,8 @@
 import { writable, derived } from 'svelte/store'
 
+import { currentWeek } from './appStore.js'
+import { formatDate } from '../helpers/utils.js'
+
 function createActivityStore() {
   const { subscribe, set, update } = writable({
     activities: null,
@@ -45,6 +48,51 @@ function createActivityStore() {
 }
 
 export const activityStore = createActivityStore()
+
+export const timelineStore = derived([activityStore, currentWeek], ([$activityStore, $currentWeek]) => {
+  const timeline = {}
+
+  function buildTimelineItem(hour, activity) {
+    return {
+      startHour: hour,
+      endHour: hour,
+      activities: activity ? [activity] : [],
+      activityTypeId: activity ? activity.activityTypeId : null
+    }
+  }
+
+  $currentWeek.forEach(day => {
+    const dayTimeline = []
+    const formattedDay = formatDate(day)
+    const activities = $activityStore.activities[formattedDay]
+
+    for (let i = 0; i < 24; i++) {
+      if (typeof activities === 'undefined' || typeof activities[i] === 'undefined') {
+        dayTimeline.push(buildTimelineItem(i, null))
+        continue
+      }
+
+      const activity = {
+        hour: i,
+        ...activities[i]
+      }
+
+      const previousTimelineItem = dayTimeline[dayTimeline.length - 1]
+
+      if (!previousTimelineItem || previousTimelineItem.activityTypeId !== activity.activityTypeId) {
+        dayTimeline.push(buildTimelineItem(i, activity))
+        continue
+      }
+
+      previousTimelineItem.endHour = i
+      previousTimelineItem.activities.push(activity)
+    }
+
+    timeline[formattedDay] = dayTimeline
+  })
+
+  return timeline
+})
 
 export const activityTypes = writable({
   lastFetched: null,

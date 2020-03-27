@@ -1,6 +1,6 @@
 <script>
   import { createEventDispatcher } from 'svelte'
-  import ActivityBase from './ActivityBase.svelte'
+  import TimelineItemBase from './TimelineItemBase.svelte'
 
   import { formatHour } from '../../helpers/utils'
 
@@ -18,10 +18,10 @@
   }
 </style>
 
-<div on:click={() => dispatch('activityPlaceholderClicked')}>
-  <ActivityBase>
-    <div slot="content" class="activity-content-container">
+<div on:click={() => dispatch('timelienItemPlaceholderClicked')}>
+  <TimelineItemBase>
+    <div slot="content" class="timeline-item-content-container">
       <h2 class="placeholder">{formatHour(hour)}</h2>
     </div>
-  </ActivityBase>
+  </TimelineItemBase>
 </div>

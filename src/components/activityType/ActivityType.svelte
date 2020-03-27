@@ -1,7 +1,7 @@
 <script>
   import { createEventDispatcher } from 'svelte'
 
-  import ActivityBase from '../activity/ActivityBase.svelte'
+  import TimelineItemBase from '../timeline/TimelineItemBase.svelte'
 
   export let notes
   export let activityType
@@ -35,14 +35,14 @@
 </style>
 
 <div on:click={() => dispatch('activityTypeClicked')}>
-  <ActivityBase>
-    <div slot="icon" class="activity-icon-container" style="background-color: #{activityType.color}">
-      <img src="/icons/activityTypes/{activityType.icon}.svg" class="activity-icon" alt={activityType.name} />
+  <TimelineItemBase>
+    <div slot="icon" class="timeline-item-icon-container" style="background-color: #{activityType.color}">
+      <img src="/icons/activityTypes/{activityType.icon}.svg" class="timeline-item-icon" alt={activityType.name} />
     </div>
 
-    <div slot="content" class="activity-content-container" style="background-color: #{activityType.colorAccent}">
+    <div slot="content" class="timeline-item-content-container" style="background-color: #{activityType.colorAccent}">
       <h2>{activityType.name}</h2>
       <p>{notes}</p>
     </div>
-  </ActivityBase>
+  </TimelineItemBase>
 </div>

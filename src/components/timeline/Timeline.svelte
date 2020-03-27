@@ -1,12 +1,12 @@
 <script>
   import { onMount } from 'svelte'
 
-  import Activity from './Activity.svelte'
-  import ActivityPlaceholder from './ActivityPlaceholder.svelte'
-  import ActivitySkeleton from '../loadingSkeletons/ActivitySkeleton.svelte'
+  import TimelineItem from './TimelineItem.svelte'
+  import TimelineItemPlaceholder from './TimelineItemPlaceholder.svelte'
+  import TimelineItemLoading from '../timeline/TimelineItemLoading.svelte'
 
   import { currentDate, currentWeek } from '../../stores/appStore.js'
-  import { activityStore, activityTypes } from '../../stores/activityStore.js'
+  import { activityStore, activityTypes, timelineStore } from '../../stores/activityStore.js'
 
   import { formatDate } from '../../helpers/utils'
   import { DAYS, MONTHS } from '../../helpers/constants'
@@ -16,6 +16,8 @@
 
   import firebase from '../../helpers/firebase'
   import 'firebase/database'
+
+  let expandedBlock = null
 
   function buildSwipeConfig(startSlide) {
     return {
@@ -50,6 +52,7 @@
 
   function handleDayChange(newDay) {
     $currentDate = newDay
+    expandedBlock = null
 
     window.mySwipe.slide($currentDate.getDay() + 1)
   }
@@ -60,6 +63,7 @@
     date.setDate(date.getDate() + newDayOffset)
 
     $currentDate = date
+    expandedBlock = null
 
     $activityStore = {
       lastFetched: new Date(),
@@ -111,7 +115,7 @@
     margin-top: 5px;
   }
 
-  .activity-list {
+  .timeline {
     top: 170px;
   }
 
@@ -146,34 +150,44 @@
     {/each}
   </div>
 
-  <div class="scrollable activity-list">
+  <div class="scrollable timeline">
     <div id="slider" class="swipe">
       <div class="swipe-wrap">
         <div>
           {#each Array(12) as _, i}
-            <ActivitySkeleton />
+            <TimelineItemLoading />
           {/each}
         </div>
-        {#each $currentWeek as day, dayIndex}
+        {#each Object.keys($timelineStore) as day}
           <div>
-            {#each Array(24) as _, i}
-              {#if $activityStore.activities[formatDate(day)] && $activityStore.activities[formatDate(day)][i]}
-                <Activity
-                  hour={i}
-                  notes={$activityStore.activities[formatDate(day)][i].notes}
-                  activityType={$activityTypes.activityTypes[$activityStore.activities[formatDate(day)][i].activityTypeId]}
-                  on:activityClicked={() => (window.location = `#/activities/edit/${formatDate(day)}/${i}`)} />
+            {#each $timelineStore[day] as timelineItem}
+              {#if timelineItem.activities.length === 0}
+                <TimelineItemPlaceholder
+                  hour={timelineItem.startHour}
+                  on:timelienItemPlaceholderClicked={() => (window.location = `#/activities/add/${day}/${timelineItem.startHour}`)} />
+              {:else if timelineItem.activities.length === 1 || expandedBlock === timelineItem.startHour}
+                {#each timelineItem.activities as activity}
+                  <TimelineItem
+                    startHour={activity.hour}
+                    endHour={activity.hour}
+                    activities={[activity]}
+                    activityType={$activityTypes.activityTypes[activity.activityTypeId]}
+                    on:timelineItemClicked={() => (window.location = `#/activities/edit/${day}/${activity.hour}`)} />
+                {/each}
               {:else}
-                <ActivityPlaceholder
-                  hour={i}
-                  on:activityPlaceholderClicked={() => (window.location = `#/activities/add/${formatDate(day)}/${i}`)} />
+                <TimelineItem
+                  startHour={timelineItem.startHour}
+                  endHour={timelineItem.endHour}
+                  activities={timelineItem.activities}
+                  activityType={$activityTypes.activityTypes[timelineItem.activityTypeId]}
+                  on:timelineItemClicked={() => (expandedBlock = timelineItem.startHour)} />
               {/if}
             {/each}
           </div>
         {/each}
         <div>
           {#each Array(12) as _, i}
-            <ActivitySkeleton />
+            <TimelineItemLoading />
           {/each}
         </div>
       </div>
